@@ -1,5 +1,6 @@
 var express = require('express');
-var key = require('./key.js');
+var mongo = require('mongodb').MongoClient;
+var mlabUrl = require('./key.js');
 
 var app = express();
 var port = 3000;
@@ -8,20 +9,26 @@ app.set('views', './views');
 app.set('view engine', 'pug');
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 
+
+
+
+
+//HOME PAGE
 app.get("/", function(req, res) {
-    res.render("index.pug", {
-        polls: [
-            {
-                name: "What is your favorite ice cream flavor?",
-                responses: 137,
-                pollID: 621534
-            },
-            {
-                name: "Who will win the Super Bowl?",
-                responses: 478,
-                pollID: 873641
-            }
-        ]
+
+    mongo.connect(mlabUrl, function (err, db) {
+        if (err) throw err;
+        var polls = db.collection("polls");
+        polls.find({}, {
+            name: 1,
+            responses: 1,
+            pollID: 1,
+            _id: 0
+        }).toArray(function(e, docs) {
+            if (e) throw e;
+            db.close();
+            res.render("index.pug", {polls: docs});
+        });
     });
 });
 
