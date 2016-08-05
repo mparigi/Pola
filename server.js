@@ -6,7 +6,7 @@ var port = 3000;
 
 app.set('views', './views');
 app.set('view engine', 'pug');
-
+app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 
 app.get("/", function(req, res) {
     res.render("index.pug");
