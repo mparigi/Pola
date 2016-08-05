@@ -9,7 +9,20 @@ app.set('view engine', 'pug');
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 
 app.get("/", function(req, res) {
-    res.render("index.pug");
+    res.render("index.pug", {
+        polls: [
+            {
+                name: "What is your favorite ice cream flavor?",
+                responses: 137,
+                pollID: 621534
+            },
+            {
+                name: "Who will win the Super Bowl?",
+                responses: 478,
+                pollID: 873641
+            }
+        ]
+    });
 });
 
 app.get("/login", function(req, res) {
