@@ -3,4 +3,26 @@ html(lang='en')
     head
         meta(charset='utf-8')
         title Pola: Account Settings
-    body Account Settings
+        link(href="/bootstrap/css/bootstrap.min.css", rel="stylesheet")
+        link(href="/styles/style.css", rel="stylesheet")
+
+    body
+        nav.navbar.navbar-default
+            div.container-fluid
+                div.navbar-header
+                    a.navbar-brand(href="/") Pola
+                ul.nav.navbar-nav.navbar-right
+                    li
+                        a
+                            | Hello, 
+                            =user.name
+                    li.active
+                        a(href="/settings")
+                            span.glyphicon.glyphicon-cog
+                    li
+                        a(href="/logout") Log out
+        //end navbar
+        
+        
+        
+    script(src="/bootstrap/js/bootstrap.min.js")

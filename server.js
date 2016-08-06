@@ -126,11 +126,6 @@ passport.deserializeUser(function(username, done) {
 
 
 
-
-
-
-
-
 //HOME PAGE
 app.get("/", function(req, res) {
     mongo.connect(mlabUrl, function (err, db) {
@@ -179,6 +174,7 @@ app.post(
     })
 );
 
+
 app.get("/polls/:pollID", function(req, res) {
     res.end("Poll with pollID " + req.params.pollID);
 });
@@ -192,7 +188,7 @@ app.get("/mypolls", isAuthenticated, function(req, res) {
 });
 
 app.get("/settings", isAuthenticated, function(req, res) {
-    res.render("settings.pug");
+    res.render("settings.pug", {user: req.user});
 });
 
 app.get("/logout", function (req, res) {
