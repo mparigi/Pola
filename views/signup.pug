@@ -18,9 +18,13 @@ html(lang='en')
                             span.glyphicon.glyphicon-user
                             form(class='form-signin', action='/signup', method='POST')
                                 input(type='text', name='username' class='form-control', placeholder='Username',required, autofocus)
+                                input(type='text', name='name' class='form-control', placeholder='Name', required)
+                                input(type='email', name='email' class='form-control', placeholder='name@example.com', required)
                                 input(type='password', name='password' class='form-control', placeholder='Password', required)
                                 button(class='btn btn-lg btn-primary btn-block', type='submit') Register
                                 span.clearfix
+                            h6 Already have an account? 
+                                a(href='/signup', class='text-center') Log In
                             if authMessage
                                 h4.text-center.error-message= authMessage
     script(src="/bootstrap/js/bootstrap.min.js")

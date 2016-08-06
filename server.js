@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
 var bodyParser = require('body-parser');
+var bCrypt = require('bcrypt-nodejs');
 
 var app = express();
 var port = 3000;
@@ -29,10 +30,23 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(flash());
 
 
+var isAuthenticated = function (req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/');
+}
+
+var isValidPass = function (user, password) {
+    return bCrypt.compareSync(password, user.password);
+}
+
+var createHash = function (password) {
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
+
+
+
 passport.use("login", new LocalStrategy(
     {
-        usernameField: "username",
-        passwordField: "password",
         passReqToCallback: true
     },
     function(req, username, password, done) {
@@ -45,7 +59,7 @@ passport.use("login", new LocalStrategy(
                 if (!user) {
                     return done(null, false, req.flash("message", "User not found."));
                 }
-                if (user.password != password) {
+                if (!isValidPass(user, password)) {
                     return done(null, false, req.flash("message", "Invalid Password"));
                 }
                 return done(null, user);
@@ -70,7 +84,9 @@ passport.use("signup", new LocalStrategy(
                     } else {
                         var newUser = {
                             "username": username,
-                            "password": password
+                            "password": createHash(password),
+                            "name": req.body.name,
+                            "email": req.body.email
                         }
                         accounts.insertOne(newUser, function (error, result) {
                             if (error) throw error;
@@ -87,25 +103,20 @@ passport.use("signup", new LocalStrategy(
 
 
 passport.serializeUser(function(user, done) {
-    done(null, user._id);
+    done(null, user.username);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function(username, done) {
     mongo.connect(mlabUrl, function (err, db) {
         if (err) throw err;
         var accounts = db.collection("accounts");
-        accounts.findOne({_id: id}, function (e, user) {
+        accounts.findOne({"username": username}, function (e, user) {
+            if (e) throw e;
+            db.close();
             done(err, user);
         });
     });
 });
-
-var isAuthenticated = function (req, res, next) {
-    if (req.isAuthenticated()) return next();
-    res.redirect('/');
-}
-
-
 
 
 
@@ -133,7 +144,6 @@ app.get("/", function(req, res) {
         }).toArray(function(e, docs) {
             if (e) throw e;
             db.close();
-            console.log("user", req.user);
             res.render("index.pug", {polls: docs, user: req.user});
         });
     });
@@ -178,19 +188,11 @@ app.get("/create", isAuthenticated, function(req, res) {
 });
 
 app.get("/mypolls", isAuthenticated, function(req, res) {
-    if (/*authenticated user*/true) {
-        res.render("mypolls.pug");
-    } else {
-        res.render("no-acccount-error.pug");
-    }
+    res.render("mypolls.pug");
 });
 
 app.get("/settings", isAuthenticated, function(req, res) {
-    if (/*authenticated user*/true) {
-        res.render("settings.pug");
-    } else {
-        res.render("no-acccount-error.pug");
-    }
+    res.render("settings.pug");
 });
 
 app.get("/logout", function (req, res) {
