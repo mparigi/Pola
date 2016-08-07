@@ -3,4 +3,48 @@ html(lang='en')
     head
         meta(charset='utf-8')
         title Pola: My Polls
-    body List of my Polls
+        link(href="/bootstrap/css/bootstrap.min.css", rel="stylesheet")
+        link(href="/styles/style.css", rel="stylesheet")
+    body
+    
+        nav.navbar.navbar-default
+            div.container-fluid
+                div.navbar-header
+                    a.navbar-brand(href="/") Pola
+                ul.nav.navbar-nav.navbar-right
+                    li
+                        a
+                            | Hello, 
+                            =user.name
+                    li
+                        a(href="/settings")
+                            span.glyphicon.glyphicon-cog
+                    li
+                        a(href="/logout") Log out
+        //end navbar
+        
+        div.container
+            div.jumbotron.container-fluid
+                h1 Pola
+                h2 Real Time Polling
+                div.col-sm-4.text-center.col-md-offset-4
+                    a(href="/create")
+                        button.btn.btn-primary.btn-lg(type="button") New Poll
+            //end jumbotron
+            
+            div.well.well-lg
+                h3.text-center My Polls
+                hr
+                div.list-group
+                    if mypolls.length
+                        each poll in mypolls
+                            a(href="/polls/" + poll.pollID)
+                                li.list-group-item
+                                    span.badge=poll.responses
+                                    =poll.name
+                    else
+                        h5.text-center None yet! Why not 
+                            a(href="/create") create one?
+        
+        
+    script(src="/bootstrap/js/bootstrap.min.js")

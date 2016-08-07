@@ -232,7 +232,42 @@ app.get("/create", isAuthenticated, function(req, res) {
 });
 
 app.get("/mypolls", isAuthenticated, function(req, res) {
-    res.render("mypolls.pug");
+    mongo.connect(mlabUrl, function (err, db) {
+        if (err) throw err;
+        var pCol = db.collection("polls");
+        pCol.find(
+            {creator: req.user.username},
+            {
+                name: 1,
+                responses: 1,
+                pollID: 1,
+                _id: 0
+            }
+        ).toArray(function(e, docs){
+            if (e) throw e;
+            db.close();
+            res.render("mypolls.pug", {user: req.user, mypolls: docs});
+        });
+    });
+});
+
+app.get("/delete", isAuthenticated, function(req, res){
+    if (req.user.username != req.query.u) {
+        res.end("You are not authorized to delete this poll.");
+    } else {
+        mongo.connect(mlabUrl, function(err, db) {
+            if (err) throw err;
+            var pCol = db.collection("polls");
+            pCol.deleteOne(
+                {pollID: Number(req.query.p)},
+                function (e, results) {
+                    if (e) throw e;
+                    db.close();
+                    res.redirect("/mypolls");
+                }
+            );
+        });
+    }
 });
 
 app.get("/settings", isAuthenticated, function(req, res) {

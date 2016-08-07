@@ -45,6 +45,9 @@ html(lang='en')
                             br
                         input(type="hidden", name="pollID", value=poll.pollID)
                         input(type="submit", value="Submit")
+                    if user && user.username === poll.creator
+                        br
+                        button.btn.btn-danger(type="button", onclick="del()") Delete Poll
                 div.col-sm-6
                     canvas#donutchart(width="400", height="400")
                 
@@ -82,3 +85,14 @@ html(lang='en')
                 responsive: true,
             }
         });
+        
+        //---------------------------------
+        
+        function del () {
+            if (window.confirm("Are you sure you want to delete this poll?")) {
+                window.location = "/delete?p="+poll.pollID+"&u="+poll.creator;
+            }
+        }
+        
+        
+        
