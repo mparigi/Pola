@@ -188,7 +188,33 @@ app.get("/mypolls", isAuthenticated, function(req, res) {
 });
 
 app.get("/settings", isAuthenticated, function(req, res) {
-    res.render("settings.pug", {user: req.user});
+    res.render("settings.pug", {user: req.user, authMessage: req.flash("message")});
+});
+
+app.post("/passchange", isAuthenticated, function (req, res) {
+    if (isValidPass(req.user, req.body.oldPass)) {
+        if (req.body.newPass != req.body.confirmNewPass) {
+            req.flash("message", "Passwords don't match.");
+            res.redirect("/settings");
+        } else {
+            mongo.connect(mlabUrl, function (err, db) {
+                if (err) throw err;
+                var accounts = db.collection("accounts");
+                accounts.updateOne(
+                    {"username": req.user.username},
+                    {$set: {"password": createHash(req.body.newPass)}},
+                    function (error, results) {
+                        if (error) throw error;
+                        req.logout();
+                        res.render("updatedpass.pug");
+                    }
+                );
+            });
+        }
+    } else {
+        req.flash("message", "Incorrect Current Password.");
+        res.redirect("/settings");
+    }
 });
 
 app.get("/logout", function (req, res) {

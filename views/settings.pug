@@ -22,7 +22,18 @@ html(lang='en')
                     li
                         a(href="/logout") Log out
         //end navbar
-        
-        
+            
+        div.col-md-4.col-md-offset-4
+            div.well.well-lg
+                h4.text-center Change your password
+                form(class='form-signin', action='/passchange', method='POST')
+                    input(type='password', name='oldPass' class='form-control', placeholder='Current Password',required, autofocus)
+                    input(type='password', name='newPass' class='form-control', placeholder='New Password', required)
+                    input(type='password', name='confirmNewPass' class='form-control', placeholder='Confirm New Password', required)
+                    button(class='btn btn-lg btn-primary btn-block', type='submit') Change Password
+                    span.clearfix
+                if authMessage
+                    h4.text-center.error-message= authMessage
         
     script(src="/bootstrap/js/bootstrap.min.js")
+    
