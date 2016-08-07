@@ -1,0 +1,84 @@
+doctype
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        title Pola
+        link(href="/bootstrap/css/bootstrap.min.css", rel="stylesheet")
+        link(href="/styles/style.css", rel="stylesheet")
+    body
+    
+        nav.navbar.navbar-default
+            div.container-fluid
+                div.navbar-header
+                    a.navbar-brand(href="/") Pola
+                ul.nav.navbar-nav.navbar-right
+                    if !user
+                        li
+                            a(href="/signup")
+                                span.glyphicon.glyphicon-user
+                                |   Sign Up
+                        li
+                            a(href="/login")
+                                span.glyphicon.glyphicon-log-in
+                                |   Login
+                    else
+                        li
+                            a
+                                | Hello, 
+                                =user.name
+                        li
+                            a(href="/settings")
+                                span.glyphicon.glyphicon-cog
+                        li
+                            a(href="/logout") Log out
+        //end navbar
+        
+        div.container
+            div.jumbotron.container-fluid
+                div.col-sm-6
+                    h3= poll.name
+                    form(action="/vote" method="POST")
+                        each op, i in poll.options
+                            input(type="radio" name="selection" value=i)
+                            ="\t" + poll.options[i].op
+                            br
+                            br
+                        input(type="hidden", name="pollID", value=poll.pollID)
+                        input(type="submit", value="Submit")
+                div.col-sm-6
+                    canvas#donutchart(width="400", height="400")
+                
+            //end jumbotron
+        
+        
+    script(src="/bootstrap/js/bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.4.4/randomColor.min.js")
+    script.
+        var poll = !{JSON.stringify(poll)};
+        var ctx = document.getElementById("donutchart").getContext("2d");
+        
+        var labels = [];
+        var dataset = [];
+        var colors = [];
+        for (var i in poll.options) {
+            labels.push(poll.options[i].op);
+            dataset.push(poll.options[i].opRes);
+            colors.push(randomColor());
+        }
+        
+        var donutChart = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        data: dataset,
+                        backgroundColor: colors
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+            }
+        });

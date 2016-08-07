@@ -176,11 +176,59 @@ app.post(
 
 
 app.get("/polls/:pollID", function(req, res) {
-    res.end("Poll with pollID " + req.params.pollID);
+
+
+    var testData = {
+        name: "n",
+        responses: 137,
+        options: [
+            {op: "c", opRes: 135},
+            {op: "v", opRes: 2},
+        ]
+    }
+
+    mongo.connect(mlabUrl, function (err, db) {
+        if (err) throw err;
+        var pCol = db.collection("polls");
+        pCol.findOne(
+            {pollID: Number(req.params.pollID)},
+            function (error, doc) {
+                if (error) throw error;
+                db.close();
+                res.render("poll.pug", {poll: doc, user: req.user});
+            }
+        );
+    });
+});
+
+app.post("/vote", function (req, res){
+    var selNum = req.body.selection;
+    var pid = Number(req.body.pollID);
+    var incer = {
+        responses: 1
+    }
+    incer["options." + selNum.toString() + ".opRes"] = 1;
+
+    mongo.connect(mlabUrl, function (err, db) {
+        if (err) throw err;
+        var polls = db.collection("polls");
+        polls.updateOne(
+            {pollID: pid},
+            {
+                $inc: incer,
+                $set: {latestResTime: Date.now()}
+            },
+            function (error, results) {
+                if (error) throw error;
+                db.close();
+                res.redirect("/polls/" + pid);
+            }
+        );
+    });
 });
 
 app.get("/create", isAuthenticated, function(req, res) {
-
+    res.render("create.pug");
 });
 
 app.get("/mypolls", isAuthenticated, function(req, res) {
