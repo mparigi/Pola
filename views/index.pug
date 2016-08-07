@@ -37,15 +37,22 @@ html(lang='en')
             div.jumbotron.container-fluid
                 h1 Pola
                 h2 Real Time Polling
-                div.col-sm-4
-                    h3 Live Results
-                    h6 Live graphs show your poll results immediately in an easy to understand format. One graph will not provide the whole picture, that's why we provide multiple graph types to better describe your results.
-                div.col-sm-4
-                    h3 Works Everywhere
-                    h6 Traditional desktop computers now represent only 30% of Internet traffic. Your poll must work on the tablets, smart phones, netbooks and notebooks that your visitors are using. Our responsive designs do just that.
-                div.col-sm-4 
-                    h3 Social Integration 
-                    h6 Free integrated facebook or traditional comments allow your poll voters to provide immediate feedback and discuss results. Social share buttons encourage your poll voters to help spread the word.
+                if !user
+                    div.col-sm-4
+                        h3 Live Results
+                        h6 Live graphs show your poll results immediately in an easy to understand format. One graph will not provide the whole picture, that's why we provide multiple graph types to better describe your results.
+                    div.col-sm-4
+                        h3 Works Everywhere
+                        h6 Traditional desktop computers now represent only 30% of Internet traffic. Your poll must work on the tablets, smart phones, netbooks and notebooks that your visitors are using. Our responsive designs do just that.
+                    div.col-sm-4 
+                        h3 Social Integration 
+                        h6 Free integrated facebook or traditional comments allow your poll voters to provide immediate feedback and discuss results. Social share buttons encourage your poll voters to help spread the word.
+                else
+                    div.col-sm-4.text-center.col-md-offset-4
+                        a(href="/create")
+                            button.btn.btn-primary.btn-lg(type="button") New Poll
+                        a(href="/mypolls") 
+                            button.btn.btn-success.btn-lg(type="button") My Polls
             //end jumbotron
             
             div.well.well-lg
