@@ -3,4 +3,26 @@ html(lang='en')
     head
         meta(charset='utf-8')
         title Pola: Login
-    body Login
+        link(href="/bootstrap/css/bootstrap.min.css", rel="stylesheet")
+        link(href="/styles/style.css", rel="stylesheet")    
+        
+    body
+        nav.navbar.navbar-default
+            div.container-fluid
+                div.navbar-header
+                    a.navbar-brand(href="/") Pola
+        div.container
+            div.row
+                div.col-sm-6.col-md-4.col-md-offset-4
+                    h1.text-center.login-title Log In
+                        div.account-wall
+                            span.glyphicon.glyphicon-log-in
+                            form(class='form-signin', action='/login', method='POST')
+                                input(type='text', name='username' class='form-control', placeholder='Username',required, autofocus)
+                                input(type='password', name='password' class='form-control', placeholder='Password', required)
+                                button(class='btn btn-lg btn-primary btn-block', type='submit') Sign in
+                                span.clearfix
+                            a(href='/signup', class='text-center new-account') Create an account
+                            if authMessage
+                                h4.text-center.error-message= authMessage
+    script(src="/bootstrap/js/bootstrap.min.js")
