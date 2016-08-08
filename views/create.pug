@@ -28,14 +28,14 @@ html(lang='en')
                 form(action="/create" method="POST")
                     div.form-group
                         label(for='question') Question
-                        input.form-control(type='text', name='question' placeholder='What is your favorite color?')
+                        input.form-control(type='text', name='question' placeholder='What is your favorite color?' required)
                     div#optionsDiv
                         div.form-group
                             label(for='option1') Option 1
-                            input.form-control(type='text', name='option1', placeholder="Blue")
+                            input.form-control(type='text', name='option1', placeholder="Blue" required)
                         div.form-group
                             label(for='option2') Option 2
-                            input.form-control(type='text', name='option2', placeholder="Red")
+                            input.form-control(type='text', name='option2', placeholder="Red" required)
                     button.btn.btn-info(type="button", onclick="addOption()", style="float: left;") Add Option
                     button.btn.btn-success(type="submit", style="float: right;") Submit Poll
                     
