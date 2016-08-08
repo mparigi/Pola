@@ -10,7 +10,7 @@ var bodyParser = require('body-parser');
 var bCrypt = require('bcrypt-nodejs');
 
 var app = express();
-var port = 3000;
+var port = process.env.PORT || 8080;
 
 app.set('views', './views');
 app.set('view engine', 'pug');
