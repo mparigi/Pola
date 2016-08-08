@@ -20,7 +20,7 @@ app.use('/styles', express.static(__dirname + '/styles'));
 
 app.use(cookieParser());
 app.use(session({
-    secret: 'mySecretKey',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true
 }));
