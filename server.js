@@ -4,7 +4,6 @@ var mlabUrl = process.env.MLAB_URL;
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieParser = require('cookie-parser');
-//var session = require('express-session');
 var cookieSession = require('cookie-session')
 var flash = require('connect-flash');
 var bodyParser = require('body-parser');
