@@ -23,7 +23,7 @@ app.use('/styles', express.static(__dirname + '/styles'));
 
 app.use(cookieParser());
 app.use(cookieSession({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET
 }));
 app.use(passport.initialize());
 app.use(passport.session());
