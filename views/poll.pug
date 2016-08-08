@@ -48,11 +48,13 @@ html(lang='en')
                     if user && user.username === poll.creator
                         br
                         button.btn.btn-danger(type="button", onclick="del()") Delete Poll
+                    br
+                    a.share-button(href="https://twitter.com/intent/tweet?text=Check out this poll on Pola! app.com/polls/" + poll.pollID) Share on Twitter
+                        img(src="https://simplesharebuttons.com/images/somacro/twitter.png", alt="Twitter")
                 div.col-sm-6
                     canvas#donutchart(width="400", height="400")
                 
             //end jumbotron
-        
         
     script(src="/bootstrap/js/bootstrap.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.min.js")
