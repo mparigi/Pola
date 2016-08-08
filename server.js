@@ -4,7 +4,8 @@ var mlabUrl = process.env.MLAB_URL;
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieParser = require('cookie-parser');
-var session = require('express-session');
+//var session = require('express-session');
+var cookieSession = require('cookie-session')
 var flash = require('connect-flash');
 var bodyParser = require('body-parser');
 var bCrypt = require('bcrypt-nodejs');
@@ -15,14 +16,14 @@ var port = process.env.PORT || 8080;
 app.set('views', './views');
 app.set('view engine', 'pug');
 
+app.set('trust proxy', 1)
+
 app.use('/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 app.use('/styles', express.static(__dirname + '/styles'));
 
 app.use(cookieParser());
-app.use(session({
+app.use(cookieSession({
     secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
