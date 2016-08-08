@@ -1,6 +1,6 @@
 var express = require('express');
 var mongo = require('mongodb').MongoClient;
-var mlabUrl = require('./key.js');
+var mlabUrl = process.env.MLAB_URL;
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieParser = require('cookie-parser');
