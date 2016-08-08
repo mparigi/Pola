@@ -226,7 +226,7 @@ app.get("/create", isAuthenticated, function(req, res) {
 
 app.post("/create", isAuthenticated, function (req, res) {
     var question = req.body.question;
-    var ops = [req.body.option1, req.body.option2].concat(req.body.undefined);
+    var ops = req.body.undefined ? [req.body.option1, req.body.option2].concat(req.body.undefined): [req.body.option1, req.body.option2];
     mongo.connect(mlabUrl, function (err, db) {
         if (err) throw err;
         var pCol = db.collection("polls");
