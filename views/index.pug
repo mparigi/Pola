@@ -34,19 +34,19 @@ html(lang='en')
         //end navbar
         
         div.container
-            div.jumbotron.container-fluid
-                h1 Pola
-                h2 Real Time Polling
+            div.jumbotron.container-fluid(style="padding-top: 5px;")
+                h1.text-center Pola
+                h4.text-center.text-muted Real Time Polling
                 if !user
                     div.col-sm-4
-                        h3 Live Results
-                        h6 Live graphs show your poll results immediately in an easy to understand format. One graph will not provide the whole picture, that's why we provide multiple graph types to better describe your results.
+                        h4 Live Results
+                        h5 Live graphs show your poll results immediately in an easy to understand format.
                     div.col-sm-4
-                        h3 Works Everywhere
-                        h6 Traditional desktop computers now represent only 30% of Internet traffic. Your poll must work on the tablets, smart phones, netbooks and notebooks that your visitors are using. Our responsive designs do just that.
+                        h4 Works Everywhere
+                        h5 Traditional desktop computers now represent only 30% of Internet traffic. Your poll must work on the tablets, smart phones, netbooks and notebooks that your visitors are using. Our responsive designs do just that.
                     div.col-sm-4 
-                        h3 Social Integration 
-                        h6 Free integrated facebook or traditional comments allow your poll voters to provide immediate feedback and discuss results. Social share buttons encourage your poll voters to help spread the word.
+                        h4 Social Integration 
+                        h5 Social share buttons encourage your poll voters to help spread the word.
                 else
                     div.col-sm-4.text-center.col-md-offset-4
                         a(href="/create")
