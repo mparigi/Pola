@@ -3,4 +3,59 @@ html(lang='en')
     head
         meta(charset='utf-8')
         title Pola: Create
-    body Create Poll
+        link(href="/bootstrap/css/bootstrap.min.css", rel="stylesheet")
+        link(href="/styles/style.css", rel="stylesheet")
+    body
+    
+        nav.navbar.navbar-default
+            div.container-fluid
+                div.navbar-header
+                    a.navbar-brand(href="/") Pola
+                ul.nav.navbar-nav.navbar-right
+                    li
+                        a
+                            | Hello, 
+                            =user.name
+                    li
+                        a(href="/settings")
+                            span.glyphicon.glyphicon-cog
+                    li
+                        a(href="/logout") Log out
+        //end navbar
+        
+        div.container
+            div.jumbotron.container-fluid
+                form(action="/create" method="POST")
+                    div.form-group
+                        label(for='question') Question
+                        input.form-control(type='text', name='question' placeholder='What is your favorite color?')
+                    div#optionsDiv
+                        div.form-group
+                            label(for='option1') Option 1
+                            input.form-control(type='text', name='option1', placeholder="Blue")
+                        div.form-group
+                            label(for='option2') Option 2
+                            input.form-control(type='text', name='option2', placeholder="Red")
+                    button.btn.btn-info(type="button", onclick="addOption()", style="float: left;") Add Option
+                    button.btn.btn-success(type="submit", style="float: right;") Submit Poll
+                    
+                
+            //end jumbotron
+        
+        
+    script(src="/bootstrap/js/bootstrap.min.js")
+    script.
+        function addOption () {
+            var op = document.createElement("div");
+            op.className = "form-group";
+            var lbl = document.createElement("label");
+            lbl.setAttribute("for", "option" + (document.getElementById("optionsDiv").childElementCount+1));
+            lbl.innerHTML = "Option " + (document.getElementById("optionsDiv").childElementCount+1)
+            var ip = document.createElement("input");
+            ip.className = "form-control";
+            ip.setAttribute("type", "text");
+            ip.setAttribute("name", lbl.for);
+            op.appendChild(lbl);
+            op.appendChild(ip);
+            document.getElementById("optionsDiv").appendChild(op);
+        }

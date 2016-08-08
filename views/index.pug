@@ -57,12 +57,16 @@ html(lang='en')
             
             div.well.well-lg
                 h3.text-center Polls
+                hr
                 div.list-group
                     each poll in polls
                         a(href="/polls/" + poll.pollID)
                             li.list-group-item
                                 span.badge=poll.responses
                                 =poll.name
+                                small.small.text-muted
+                                    |   -  
+                                    = poll.creator
         
         
     script(src="/bootstrap/js/bootstrap.min.js")

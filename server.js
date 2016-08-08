@@ -135,8 +135,11 @@ app.get("/", function(req, res) {
             name: 1,
             responses: 1,
             pollID: 1,
+            creator: 1,
             _id: 0
-        }).toArray(function(e, docs) {
+        }).sort(
+            {latestResTime: -1}
+        ).toArray(function(e, docs) {
             if (e) throw e;
             db.close();
             res.render("index.pug", {polls: docs, user: req.user});
@@ -176,16 +179,6 @@ app.post(
 
 
 app.get("/polls/:pollID", function(req, res) {
-
-
-    var testData = {
-        name: "n",
-        responses: 137,
-        options: [
-            {op: "c", opRes: 135},
-            {op: "v", opRes: 2},
-        ]
-    }
 
     mongo.connect(mlabUrl, function (err, db) {
         if (err) throw err;
@@ -228,7 +221,36 @@ app.post("/vote", function (req, res){
 });
 
 app.get("/create", isAuthenticated, function(req, res) {
-    res.render("create.pug");
+    res.render("create.pug", {user: req.user});
+});
+
+app.post("/create", isAuthenticated, function (req, res) {
+    var question = req.body.question;
+    var ops = [req.body.option1, req.body.option2].concat(req.body.undefined);
+    mongo.connect(mlabUrl, function (err, db) {
+        if (err) throw err;
+        var pCol = db.collection("polls");
+        var newPoll = {
+            name: question,
+            responses: 0,
+            createTime: Date.now(),
+            creator: req.user.username,
+            latestResTime: Date.now(),
+            options: []
+        }
+        for (var i in ops) {
+            newPoll.options.push({op: ops[i], opRes: 0});
+        }
+        pCol.count(function(e, cnt) {
+            if (e) throw e;
+            newPoll.pollID = cnt;
+            pCol.insertOne(newPoll, function (error, result) {
+                if (error) throw error;
+                db.close();
+                res.redirect("/polls/" + newPoll.pollID);
+            });
+        });
+    });
 });
 
 app.get("/mypolls", isAuthenticated, function(req, res) {
